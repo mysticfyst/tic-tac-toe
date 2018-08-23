@@ -1,5 +1,6 @@
 body {
-  font: 14px "Century Gothic", Futura, sans-serif;
+  font: 14px "Century Gothic", Futura, sans-serif; color: white;
+  background: #333;
   margin: 20px;
 }
 
@@ -18,22 +19,34 @@ ol, ul {
 }
 
 .square {
-  background: #fff;
-  border: 1px solid #999;
+  background: #333;
+  border: 2px solid white;
   float: left;
   font-size: 24px;
   font-weight: bold;
+  color: white;
   line-height: 34px;
-  height: 34px;
+  height: 60px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 60px;
 }
 
 .square:focus {
   outline: none;
+}
+
+.col-centered {
+  float: none;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
 }
 
 .kbd-navigation .square:focus {
