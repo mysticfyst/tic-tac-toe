@@ -10,6 +10,12 @@ function Square(props) {
   );
 }
 
+function BackButton(props) {
+  return (
+    <div onClick={props.onClick}>{" < "}</div>
+  );
+}
+
 class Board extends React.Component {
   renderSquare(i) {
     return <Square
@@ -48,12 +54,13 @@ class Game extends React.Component {
       history: [{
         squares: Array(9).fill(null),
       }],
+      stepNumber: 0,
       xIsNext: true,
     };
   }
 
   handleClick(i) {
-    const history = this.state.history;
+    const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     if (current.squares[i] || calculateWinner(current.squares)) {
       return;
@@ -64,15 +71,47 @@ class Game extends React.Component {
       history: history.concat([{
         squares: squares,
       }]),
+      stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
     });
     console.log("clicked on square " + i + "\n value = " + squares[i]);
   }
 
+  jumpTo(index) {
+    this.setState({
+      stepNumber: index,
+      xIsNext: (this.stepNumber % 2) == 0,
+    });
+  }
+
+  revert() {
+    if (this.state.stepNumber < 1) {
+      return;
+    }
+    const history = this.state.history.slice(0,-1);
+    this.setState({
+      history: history,
+      stepNumber: this.state.stepNumber - 1,
+      xIsNext: !this.state.xIsNext,
+    });
+  }
+
   render() {
     const history = this.state.history;
-    const current = history[history.length - 1];
+    const current = history[this.state.stepNumber];
     var winner = calculateWinner(current.squares);
+
+    const moves = history.map((step, move) => {
+      const desc= move ?
+      'Go to move #' + move :
+      'Go to game start';
+      return (
+        <li key={move}>
+          <button onClick={() => this.jumpTo(move)}> {desc} </button>
+        </li>
+      );
+    });
+
     let status;
     if(winner) {
       status = "Winner winner chicken dinner for " + winner;
@@ -81,11 +120,15 @@ class Game extends React.Component {
     }
     return (
       <div>
-        <div>{"<"}</div>
-        <div class="col-centered">
+      <BackButton
+        onClick={() => this.revert()}
+      />
+      <div>
+        <ol>{moves}</ol>
+      </div>
+        <div className="col-centered">
           <div className="game-info">
-            <div>{status}</div>
-            <ol>{/* TODO */}</ol>
+            <div className="margin-top-bottom">{status}</div>
           </div>
           <div className="game-board">
             <Board

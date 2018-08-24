@@ -4,8 +4,12 @@ body {
   margin: 20px;
 }
 
-ol, ul {
+ul {
   padding-left: 30px;
+}
+
+ol {
+  float: right;
 }
 
 .board-row:after {
@@ -51,6 +55,11 @@ ol, ul {
 
 .kbd-navigation .square:focus {
   background: #ddd;
+}
+
+.margin-top-bottom{
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .game {
